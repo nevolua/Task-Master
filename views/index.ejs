@@ -1,70 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 min-h-screen flex flex-col items-center text-gray-100">
-    <div class="w-full bg-gray-800 shadow-md py-4 px-8 flex justify-between items-center">
+    <header class="w-full bg-gray-800 shadow-md py-4 px-8 flex justify-between items-center">
         <h1 class="text-3xl font-bold">Task Master</h1>
-        <p>Authenticated as <%= user.name %>. Click to <a href="/logout" class="text-blue-400 hover:underline">logout</a>.</p>
-    </div>
+        <p>Authenticated as <%= user.name %>. <a href="/logout" class="text-blue-400 hover:underline">Logout</a></p>
+    </header>
 
-    <div class="mt-8 w-full max-w-4xl bg-gray-800 p-8 rounded shadow-md">
-        <h2 class="text-2xl font-bold mb-6">Create a New Task</h2>
-        <form action="/addTask" method="POST" class="space-y-4">
-            <div>
-                <label for="taskName" class="block text-sm font-medium text-gray-300">Task Name:</label>
-                <input type="text" id="taskName" name="taskName" required class="mt-1 block w-full rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label for="taskDesc" class="block text-sm font-medium text-gray-300">Description:</label>
-                <input type="text" id="taskDesc" name="taskDesc" class="mt-1 block w-full rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-                <label for="taskTime" class="block text-sm font-medium text-gray-300">Due Time:</label>
-                <input type="datetime-local" id="taskTime" name="taskTime" required class="mt-1 block w-full rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div class="flex justify-center">
-                <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add Task</button>
-            </div>
-        </form>
-    </div>
+    <main class="mt-8 w-full max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <section class="col-span-1 bg-gray-800 p-8 rounded shadow-md">
+            <h2 class="text-2xl font-bold mb-4">Quick Add Task</h2>
+            <form action="/addTask" method="POST" class="space-y-4">
+                <div>
+                    <input type="text" id="taskName" name="taskName" placeholder="Task Name" required class="w-full p-2 rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <input type="text" id="taskDesc" name="taskDesc" placeholder="Description (Optional)" class="w-full p-2 rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <input type="datetime-local" id="taskTime" name="taskTime" required class="w-full p-2 rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+                <div class="flex justify-center">
+                    <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add Task</button>
+                </div>
+            </form>
+        </section>
 
-    <div class="mt-8 w-full max-w-4xl bg-gray-800 p-8 rounded shadow-md">
-        <h2 class="text-2xl font-bold mb-6">Pending Tasks</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <% tasks.forEach(function(task) { %>
-                <% if (!task.done) { %>
-                    <div class="p-4 bg-gray-700 rounded shadow">
-                        <h3 class="text-lg font-bold"><%= task.taskName %></h3>
-                        <p class="text-gray-300"><%= task.taskDesc %></p>
-                        <p class="text-gray-400 text-sm">Due: <%= new Date(task.taskTime).toLocaleString() %></p>
-                        <form action="/markAsDone/<%= task.id %>" method="POST" style="display:inline;">
-                            <button type="submit">Mark as Done</button>
-                        </form>
-                    </div>
-                <% } %>
-            <% }); %>
-        </div>
-    </div>
-    <div class="mt-8 w-full max-w-4xl bg-gray-800 p-8 rounded shadow-md">
-        <h2 class="text-2xl font-bold mb-6">Finished</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <% tasks.forEach(function(task) { %>
-                <% if (task.done) { %>
-                    <div class="p-4 bg-gray-700 rounded shadow">
-                        <h3 class="text-lg font-bold"><%= task.taskName %></h3>
-                        <p class="text-gray-300"><%= task.taskDesc %></p>
-                        <p class="text-gray-400 text-sm">Due: <%= new Date(task.taskTime).toLocaleString() %></p>
-                        <form action="/deleteTask/<%= task.id %>" method="POST" style="display:inline;">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </div>
-                <% } %>
-            <% }); %>
-        </div>
-    </div>
+        <section class="col-span-2 space-y-8">
+            <div class="bg-gray-800 p-8 rounded shadow-md">
+                <h2 class="text-2xl font-bold mb-4">Pending Tasks</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <% tasks.forEach(function(task) { %>
+                        <% if (!task.done) { %>
+                            <div class="p-4 bg-gray-700 rounded shadow">
+                                <h3 class="text-lg font-bold"><%= task.taskName %></h3>
+                                <p class="text-gray-300"><%= task.taskDesc %></p>
+                                <p class="text-gray-400 text-sm">Due: <%= new Date(task.taskTime).toLocaleString() %></p>
+                                <form action="/markAsDone/<%= task.id %>" method="POST" class="mt-2">
+                                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Mark as Done</button>
+                                </form>
+                            </div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            </div>
 
+            <div class="bg-gray-800 p-8 rounded shadow-md">
+                <h2 class="text-2xl font-bold mb-4">Finished Tasks</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <% tasks.forEach(function(task) { %>
+                        <% if (task.done) { %>
+                            <div class="p-4 bg-gray-700 rounded shadow">
+                                <h3 class="text-lg font-bold"><%= task.taskName %></h3>
+                                <p class="text-gray-300"><%= task.taskDesc %></p>
+                                <p class="text-gray-400 text-sm">Due: <%= new Date(task.taskTime).toLocaleString() %></p>
+                                <form action="/deleteTask/<%= task.id %>" method="POST" class="mt-2">
+                                    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Delete</button>
+                                </form>
+                            </div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
