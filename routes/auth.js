@@ -4,7 +4,7 @@ var fs = require('fs');
 var hash = require('pbkdf2-password')();
 var path = require('path');
 
-var usersFilePath = path.join(__dirname, '../db/users.json');
+var usersFilePath = path.join(__dirname, '../db/auth.json');
 
 // Helper function to read JSON file
 function readUsersFile(callback) {
