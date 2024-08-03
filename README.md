@@ -7,9 +7,8 @@ Task-Master is a Node.js-based task management application that allows users to 
 ## Features
 
 - **User Authentication**: Sign up and log in functionality.
-- **Dashboard**: A blank page with a "Task Master" header upon logging in.
+- **Dashboard**: Ability to create and delete categories and tasks.
 - **Tailwind CSS**: Utilized for styling the application.
-- **Footer**: Includes credits to the developer.
 
 ## Installation
 
@@ -33,7 +32,7 @@ Task-Master is a Node.js-based task management application that allows users to 
 
 1. **Signup**: Navigate to the signup page to create a new account.
 2. **Login**: Access the login page to sign in.
-3. **Dashboard**: After logging in, you will be directed to a page with the "Task Master" header.
+3. **Dashboard**: After logging in, you will be directed to the dashboard.
 
 ## Project Structure
 
