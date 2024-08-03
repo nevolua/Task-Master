@@ -41,6 +41,7 @@ router.get('/', restrict, function(req, res, next) {
       const tasks = JSON.parse(data);
       const userTasks = tasks[userId] || [];
 
+
       res.render('index', {
         title: 'Task Master',
         user: req.session.user,
@@ -50,7 +51,7 @@ router.get('/', restrict, function(req, res, next) {
   });
 
 router.post('/addTask', function(req, res, next) {
-    const { taskName, taskDesc, taskTime } = req.body;
+    const { taskName, taskDesc, taskTime, category } = req.body;
     const user = req.session.user.name; 
     const db = readDB();
   
@@ -60,14 +61,18 @@ router.post('/addTask', function(req, res, next) {
       taskDesc: taskDesc || '',
       taskTime,
       owner: req.session.user.name,
-      done: false
+      done: false,
+      category: category
     };
   
     if (!db[user]) {
       db[user] = [];
     }
-  
-    db[user].push(newTask);
+    if (category) {
+        db[user][category].push(newTask);
+    }else {
+        db[user].push(newTask);
+    }
     
     writeDB(db);
 
