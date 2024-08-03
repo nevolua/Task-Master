@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup</title>
+</head>
+<body>
+    <% if (message) { %>
+        <div><%= message %></div>
+    <% } %>
+    <h1>Signup</h1>
+    <form action="/signup" method="post">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" name="username">
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" name="password">
+        </div>
+        <div>
+            <button type="submit">Signup</button>
+        </div>
+    </form>
+    
+</body>
+</html>
