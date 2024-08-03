@@ -2,13 +2,46 @@
 <html>
 <head>
     <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Task Master</h1>
-    <p>Authenticated as <%= user.name %>. Click to <a href="/logout">logout</a>.</p>
+<body class="bg-gray-900 min-h-screen flex flex-col items-center text-gray-100">
+    <div class="w-full bg-gray-800 shadow-md py-4 px-8 flex justify-between items-center">
+        <h1 class="text-3xl font-bold">Task Master</h1>
+        <p>Authenticated as <%= user.name %>. Click to <a href="/logout" class="text-blue-400 hover:underline">logout</a>.</p>
+    </div>
 
-    <% if (table) { %>
-        <div><%= table %></div>
-    <% } %>
+    <div class="mt-8 w-full max-w-4xl bg-gray-800 p-8 rounded shadow-md">
+        <h2 class="text-2xl font-bold mb-6">Create a New Task</h2>
+        <form action="/addTask" method="POST" class="space-y-4">
+            <div>
+                <label for="taskName" class="block text-sm font-medium text-gray-300">Task Name:</label>
+                <input type="text" id="taskName" name="taskName" required class="mt-1 block w-full rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label for="taskDesc" class="block text-sm font-medium text-gray-300">Description:</label>
+                <input type="text" id="taskDesc" name="taskDesc" class="mt-1 block w-full rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label for="taskTime" class="block text-sm font-medium text-gray-300">Due Time:</label>
+                <input type="datetime-local" id="taskTime" name="taskTime" required class="mt-1 block w-full rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div class="flex justify-center">
+                <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add Task</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="mt-8 w-full max-w-4xl bg-gray-800 p-8 rounded shadow-md">
+        <h2 class="text-2xl font-bold mb-6">Your Tasks</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <% tasks.forEach(function(task) { %>
+                <div class="p-4 bg-gray-700 rounded shadow">
+                    <h3 class="text-lg font-bold"><%= task.taskName %></h3>
+                    <p class="text-gray-300"><%= task.taskDesc %></p>
+                    <p class="text-gray-400 text-sm">Due: <%= new Date(task.taskTime).toLocaleString() %></p>
+                </div>
+            <% }); %>
+        </div>
+    </div>
 </body>
 </html>

@@ -15,5 +15,8 @@
     "morgan": "~1.9.1",
     "pbkdf2-password": "^1.2.1",
     "pug": "2.0.0-beta11"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.7"
   }
 }

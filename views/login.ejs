@@ -2,26 +2,35 @@
 <html>
 <head>
     <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <% if (message) { %>
-        <div><%= message %></div>
-    <% } %>
-    
-    <h1>Login</h1>
-    <form action="/login" method="post">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" name="username">
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" name="password">
-        </div>
-        <div>
-            <button type="submit">Login</button>
-        </div>
-    </form>
-    
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md bg-white p-8 rounded shadow-md">
+        <% if (message) { %>
+            <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
+                <%= message %>
+            </div>
+        <% } %>
+        
+        <h1 class="text-3xl font-bold mb-6 text-center">Login</h1>
+        
+        <form action="/login" method="post" class="space-y-4">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">Username:</label>
+                <input type="text" name="username" id="username" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+                <input type="password" name="password" id="password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+            <div class="flex justify-center">
+                <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Login</button>
+            </div>
+        </form>
+        
+        <p class="mt-6 text-center text-gray-700">
+            Don't have an account? <a href="/signup" class="text-blue-500 hover:underline">Sign up</a>
+        </p>
+    </div>
 </body>
 </html>
