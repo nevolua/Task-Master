@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var path = require('path');
+const { v4: uuidv4 } = require('uuid');
+
 
 const dbPath = path.join(__dirname, '../db/table.json');
 
@@ -38,7 +40,7 @@ router.get('/', restrict, function(req, res, next) {
 
       const tasks = JSON.parse(data);
       const userTasks = tasks[userId] || [];
-      
+
       res.render('index', {
         title: 'Task Master',
         user: req.session.user,
@@ -53,9 +55,12 @@ router.post('/addTask', function(req, res, next) {
     const db = readDB();
   
     const newTask = {
+      id: uuidv4(),
       taskName,
       taskDesc: taskDesc || '',
       taskTime,
+      owner: req.session.user.name,
+      done: false
     };
   
     if (!db[user]) {
@@ -63,11 +68,38 @@ router.post('/addTask', function(req, res, next) {
     }
   
     db[user].push(newTask);
+    
     writeDB(db);
-  
-    res.redirect('/');
-  });
 
+    res.redirect('/');
+});
+
+router.post('/markAsDone/:id', (req, res) => {
+    var db = readDB();
+
+    let taskId = req.params.id;
+    console.log(taskId);
+     
+    let task = db[req.session.user.name].find(t => t.id === taskId);
+
+    if (task) {
+      console.log("got task");
+      task.done = true;
+      
+      writeDB(db);
+    }
+    res.redirect('/');
+});
+
+router.post('/deleteTask/:id', (req, res) => {
+    var db = readDB();
+    let taskId = req.params.id;
+    tasks = db[req.session.user.name].filter(t => t.id !== taskId);
+
+    writeDB(tasks);
+
+    res.redirect('/');
+});
 /* GET logout. */
 router.get('/logout', function(req, res){
   req.session.destroy(function(){

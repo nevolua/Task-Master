@@ -14,7 +14,8 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "pbkdf2-password": "^1.2.1",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.7"
