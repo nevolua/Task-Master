@@ -38,7 +38,7 @@
                 </div>
             </form>
             <h2 class="text-2xl font-bold mt-8 mb-4">Create New Category</h2>
-            <form action="/createCategory" method="POST" class="space-y-4">
+            <form action="/create-category" method="POST" class="space-y-4">
                 <div>
                     <input type="text" id="categoryName" name="categoryName" placeholder="Category Name" required class="w-full p-2 rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
@@ -54,24 +54,7 @@
                 <% categories.forEach(category => { %>
                     <h3 class="text-xl font-bold mb-2"><%= category %></h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <% tasks.forEach(function(task) { %>
-                            <% if (!task.done && task.category === category) { %>
-                                <div class="p-4 bg-gray-700 rounded shadow">
-                                    <h3 class="text-lg font-bold"><%= task.taskName %></h3>
-                                    <p class="text-gray-300"><%= task.taskDesc %></p>
-                                    <p class="text-gray-400 text-sm">Due: <%= new Date(task.taskTime).toLocaleString() %></p>
-                                    <form action="/markAsDone/<%= task.id %>" method="POST" class="mt-2">
-                                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Mark as Done</button>
-                                    </form>
-                                </div>
-                            <% } %>
-                        <% }); %>
-                    </div>
-                <% }); %>
-                <h3 class="text-xl font-bold mb-2">No Category</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <% tasks.forEach(function(task) { %>
-                        <% if (!task.done && !task.category) { %>
+                        <% tasks.filter(task => task.category === category && !task.done).forEach(task => { %>
                             <div class="p-4 bg-gray-700 rounded shadow">
                                 <h3 class="text-lg font-bold"><%= task.taskName %></h3>
                                 <p class="text-gray-300"><%= task.taskDesc %></p>
@@ -80,8 +63,27 @@
                                     <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Mark as Done</button>
                                 </form>
                             </div>
+                        <% }); %>
+                        <% if (tasks.filter(task => task.category === category && !task.done).length === 0) { %>
+                            <p class="text-gray-400">No tasks in this category.</p>
                         <% } %>
+                    </div>
+                <% }); %>
+                <h3 class="text-xl font-bold mb-2">No Category</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <% tasks.filter(task => !task.category && !task.done).forEach(task => { %>
+                        <div class="p-4 bg-gray-700 rounded shadow">
+                            <h3 class="text-lg font-bold"><%= task.taskName %></h3>
+                            <p class="text-gray-300"><%= task.taskDesc %></p>
+                            <p class="text-gray-400 text-sm">Due: <%= new Date(task.taskTime).toLocaleString() %></p>
+                            <form action="/markAsDone/<%= task.id %>" method="POST" class="mt-2">
+                                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Mark as Done</button>
+                            </form>
+                        </div>
                     <% }); %>
+                    <% if (tasks.filter(task => !task.category && !task.done).length === 0) { %>
+                        <p class="text-gray-400">No tasks without a category.</p>
+                    <% } %>
                 </div>
             </div>
 

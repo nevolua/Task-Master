@@ -37,19 +37,32 @@ router.get('/', restrict, function(req, res, next) {
         console.error(err);
         return res.status(500).send('Internal Server Error');
       }
+  
+      const json = JSON.parse(data);
+      const userTasks = json[userId];
+      let categories = [];
+      let tasks = [];
 
-      const tasks = JSON.parse(data);
-      const userTasks = tasks[userId] || [];
+      for (const category in userTasks) {
+        if (userTasks.hasOwnProperty(category)) {
+          categories.push(category);
+          for (const task in category) {
+            tasks.push(task);
+          }
+        }
+      }
 
-
+      
+  
       res.render('index', {
         title: 'Task Master',
         user: req.session.user,
-        tasks: userTasks
+        tasks: tasks,
+        categories: categories
       });
     });
   });
-
+  
 router.post('/addTask', function(req, res, next) {
     const { taskName, taskDesc, taskTime, category } = req.body;
     const user = req.session.user.name; 
@@ -76,6 +89,22 @@ router.post('/addTask', function(req, res, next) {
     
     writeDB(db);
 
+    res.redirect('/');
+});
+
+router.post('/create-category', async (req, res) => {
+    const { categoryName } = req.body;
+    
+    // Read the database
+    const db = readDB();
+
+    if (!db[req.session.user.name]) { db[req.session.user.name] = {}};
+    db[req.session.user.name][categoryName] = [];
+
+    // Write the updated database
+    writeDB(db);
+
+    // Redirect to the home page
     res.redirect('/');
 });
 
