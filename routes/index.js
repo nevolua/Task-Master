@@ -7,14 +7,23 @@ const { v4: uuidv4 } = require('uuid');
 
 const dbPath = path.join(__dirname, '../db/table.json');
 
-const readDB = () => {
-  const data = fs.readFileSync(dbPath);
-  return JSON.parse(data);
-};
+function readDB() {
+  try {
+      const data = fs.readFileSync(dbPath, 'utf8');
+      return JSON.parse(data);
+  } catch (error) {
+      console.error('Error reading the database:', error);
+      return {};
+  }
+}
 
-const writeDB = (data) => {
-  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
-};
+function writeDB(data) {
+  try {
+      fs.writeFileSync(dbPath, JSON.stringify(data, null, 2), 'utf8');
+  } catch (error) {
+      console.error('Error writing to the database:', error);
+  }
+}
 
 // Restrict function to protect routes
 function restrict(req, res, next) {
@@ -45,14 +54,13 @@ router.get('/', restrict, function(req, res, next) {
 
       for (const category in userTasks) {
         if (userTasks.hasOwnProperty(category)) {
-          categories.push(category);
-          for (const task in category) {
-            tasks.push(task);
-          }
+            categories.push(category);
+            for (const task of userTasks[category]) {
+                tasks.push(task);
+            }
         }
-      }
-
-      
+    }
+      console.log(tasks);
   
       res.render('index', {
         title: 'Task Master',
@@ -63,6 +71,20 @@ router.get('/', restrict, function(req, res, next) {
     });
   });
   
+router.post('/delete-category', function (req, res, next) {
+  const {categoryName } = req.body;
+  const user = req.session.user.name;
+
+  var json = readDB();
+
+  delete json[user][categoryName];
+  console.log(`Category "${categoryName}" has been deleted.`);
+
+  writeDB(json);
+
+  res.redirect('/');
+})
+
 router.post('/addTask', function(req, res, next) {
     const { taskName, taskDesc, taskTime, category } = req.body;
     const user = req.session.user.name; 
@@ -78,15 +100,11 @@ router.post('/addTask', function(req, res, next) {
       category: category
     };
   
-    if (!db[user]) {
-      db[user] = [];
-    }
-    if (category) {
-        db[user][category].push(newTask);
-    }else {
-        db[user].push(newTask);
-    }
-    
+    db[user] = db[user] || [];
+    db[user][category] = db[user][category] || [];
+
+    db[user][category].push(newTask);
+
     writeDB(db);
 
     res.redirect('/');
@@ -95,26 +113,25 @@ router.post('/addTask', function(req, res, next) {
 router.post('/create-category', async (req, res) => {
     const { categoryName } = req.body;
     
-    // Read the database
-    const db = readDB();
+    var db = readDB();
 
     if (!db[req.session.user.name]) { db[req.session.user.name] = {}};
     db[req.session.user.name][categoryName] = [];
 
-    // Write the updated database
+
     writeDB(db);
 
-    // Redirect to the home page
+
     res.redirect('/');
 });
 
-router.post('/markAsDone/:id', (req, res) => {
+router.post('/markAsDone/:category/:id', (req, res) => {
     var db = readDB();
 
     let taskId = req.params.id;
-    console.log(taskId);
+    let category = req.params.category;
      
-    let task = db[req.session.user.name].find(t => t.id === taskId);
+    let task = db[req.session.user.name][category].find(t => t.id === taskId);
 
     if (task) {
       console.log("got task");
@@ -125,10 +142,12 @@ router.post('/markAsDone/:id', (req, res) => {
     res.redirect('/');
 });
 
-router.post('/deleteTask/:id', (req, res) => {
+router.post('/deleteTask/:category/:id', (req, res) => {
     var db = readDB();
     let taskId = req.params.id;
-    tasks = db[req.session.user.name].filter(t => t.id !== taskId);
+    let category = req.params.category;
+
+    var tasks = db[req.session.user.name][category].filter(t => t.id !== taskId);
 
     writeDB(tasks);
 
