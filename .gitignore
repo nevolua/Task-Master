@@ -2,5 +2,7 @@ node_modules
 package-lock.json
 .gitignore
 .gitattributes
-/db/auth.json
-/db/table.json
+db/auth.json
+db/table.json
+/db
+*.json
