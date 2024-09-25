@@ -6,9 +6,11 @@ Task-Master is a Node.js-based task management application that allows users to 
 
 ## Features
 
-- **User Authentication**: Sign up and log in functionality.
-- **Dashboard**: Ability to create and delete categories and tasks.
-- **Tailwind CSS**: Utilized for styling the application.
+- **User Authentication**: Seamless and easy sign up and log in functionality.
+- **Ease of Access**: Users will stay authenticated on the site until their session ends or they log out
+- **Security**: User credentials are hashed before being stored in the server
+- **Dashboard**: Ability to create and delete categories and tasks
+- **Easy Management**: Tasks can be stored in different categories, with titles, descriptions, and timestamps
 
 ## Installation
 
