@@ -38,7 +38,7 @@
     <main class="mt-8 w-full max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-8">
         <section class="col-span-1 bg-gray-800 p-8 rounded shadow-md">
             <h2 class="text-2xl font-bold mb-4">Quick Add Task</h2>
-            <form action="/addTask" method="POST" class="space-y-4" onsubmit="return confirm('Are you sure you want to add this task?');">
+            <form action="/addTask" method="POST" class="space-y-4" onsubmit="return true;">
                 <div>
                     <input type="text" id="taskName" name="taskName" placeholder="Task Name" required class="w-full p-2 rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
@@ -68,7 +68,7 @@
                 <button id="openModal" class="absolute top-4 right-4 py-2 px-4 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Create Category</button>
                 <% categories.forEach(category => { %>
                     <div class="flex items-center mb-2">
-                        <form action="/delete-category" method="POST" class="mr-2" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                        <form action="/delete-category" method="POST" class="mr-2" onsubmit="return true;">
                             <input type="hidden" name="categoryName" value="<%= category %>">
                             <button type="submit" class="text-red-600 hover:text-red-800">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -84,7 +84,7 @@
                                 <h3 class="text-lg font-bold"><%= task.taskName %></h3>
                                 <p class="text-gray-300"><%= task.taskDesc %></p>
                                 <p class="text-gray-400 text-sm">Due: <%= new Date(task.taskTime).toLocaleString() %></p>
-                                <form action="/markAsDone/<%= task.category %>/<%= task.id %>" method="POST" class="mt-2" onsubmit="return confirm('Are you sure you want to mark this task as done?');">
+                                <form action="/markAsDone/<%= task.category %>/<%= task.id %>" method="POST" class="mt-2" onsubmit="return true;">
                                     <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Mark as Done</button>
                                 </form>
                             </div>
@@ -105,7 +105,7 @@
                                 <h3 class="text-lg font-bold"><%= task.taskName %></h3>
                                 <p class="text-gray-300"><%= task.taskDesc %></p>
                                 <p class="text-gray-400 text-sm">Due: <%= new Date(task.taskTime).toLocaleString() %></p>
-                                <form action="/deleteTask/<%= task.category %>/<%= task.id %>" method="POST" class="mt-2" onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                <form action="/deleteTask/<%= task.category %>/<%= task.id %>" method="POST" class="mt-2" onsubmit="return true;">
                                     <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">Delete</button>
                                 </form>
                             </div>
@@ -120,7 +120,7 @@
     <div id="modal" class="modal flex">
         <div class="modal-content">
             <h2 class="text-xl font-bold mb-4">Create New Category</h2>
-            <form id="createCategoryForm" action="/create-category" method="POST" class="space-y-4" onsubmit="return confirm('Are you sure you want to create this category?');">
+            <form id="createCategoryForm" action="/create-category" method="POST" class="space-y-4" onsubmit="return true;">
                 <div>
                     <input type="text" id="categoryName" name="categoryName" placeholder="Category Name" required class="w-full p-2 rounded-md border-gray-700 bg-gray-700 text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                 </div>
